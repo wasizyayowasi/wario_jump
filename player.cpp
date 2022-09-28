@@ -9,7 +9,7 @@ namespace {
 	constexpr float kSizeY = 128.0f;
 
 	//ƒWƒƒƒ“ƒv—Í
-	constexpr float kJumpAcc = -25.0f;
+	constexpr float kJumpAcc = -16.0f;
 	//d—Í
 	constexpr float kGravity = 0.8f;
 
