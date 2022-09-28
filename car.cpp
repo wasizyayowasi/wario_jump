@@ -5,7 +5,7 @@
 namespace{
 	//待ち時間
 	constexpr int kWaitFrameMin = 60;
-	constexpr int kWaitFrameMax = 120;
+	constexpr int kWaitFrameMax = 180;
 	//車の速度
 	constexpr int kSpeed = -50.0f;
 }
@@ -15,6 +15,7 @@ Car::Car()
 {
 	m_handle = -1;
 	m_fieldY = 0.0f;
+	m_moveType = kMoveTypeNormal;
 	m_waitFrame = 0;
 }
 
@@ -33,8 +34,23 @@ void Car::setup(float fieldY)
 	m_vec.x = kSpeed;
 	m_vec.y = 0.0f;
 
+	//動きのヴァリエーションを選択
+	int randNum = GetRand(99);
+	if (randNum < 38) {
+		m_moveType = kMoveTypeNormal;
+	}
+	else if (randNum < 38+30) {
+		m_moveType = kMoveTypeStop;
+	}
+	else if (randNum < 38 + 30 + 30 ) {
+		m_moveType = kMoveTypeJump;
+	}
+	else {
+		m_moveType = kMoveTypeReturn;
+	}
+
 	//動き始めるまでの時間を設定
-	m_waitFrame = GetRand(kWaitFrameMax) + kWaitFrameMin;
+	m_waitFrame = GetRand(kWaitFrameMax - kWaitFrameMin) + kWaitFrameMin;
 }
 
 void Car::update()
@@ -42,6 +58,23 @@ void Car::update()
 	if (m_waitFrame > 0) {
 		m_waitFrame--;
 		return;
+	}
+	switch (m_moveType) {
+		case kMoveTypeNormal:
+			updateNormal();
+			break;
+		case kMoveTypeStop:
+			updateStop();
+			break;
+		case kMoveTypeJump:
+			updateJump();
+			break;
+		case kMoveTypeReturn:
+			updateReturn();
+			break;
+		default:
+			updateNormal();
+			break;
 	}
 	updateNormal();
 }
