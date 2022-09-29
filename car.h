@@ -54,10 +54,14 @@ private:
 	//移動開始までの待ち時間（フレーム数）
 	int m_waitFrame;
 
+	int m_stopCar;
+
 	// 位置
 	Vec2 m_pos;
 	// ベクトル
 	Vec2 m_vec;
 	// 地面の高さ
 	float m_fieldY;
+
+	int m_isReturn;
 };
