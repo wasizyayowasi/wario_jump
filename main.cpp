@@ -1,4 +1,5 @@
 #include "DxLib.h"
+#include "sceneTitle.h"
 #include "sceneMain.h"
 #include "game.h"
 
@@ -28,8 +29,23 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// ダブルバッファモード
 	SetDrawScreen(DX_SCREEN_BACK);
 
-	SceneMain scene;
-	scene.init();
+	//現在のシーン番号　　　0:Title 1:Main 2:Title
+	int sceneNo = 0;
+
+	SceneMain sceneMain;
+	sceneMain.init();
+
+	SceneTitle sceneTitle;
+	
+	switch (sceneNo) {
+	case 0:
+		sceneTitle.init();
+		break;
+	case 1:
+		sceneMain.init();
+		break;
+	}
+
 
 	while (ProcessMessage() == 0)
 	{
@@ -37,10 +53,26 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		// 画面のクリア
 		ClearDrawScreen();
 
-		scene.update();
+		//シーン変更フラグ
+		bool isChange = false;
+		switch (sceneNo) {
+		case 0:
+			isChange = sceneTitle.update();
+			sceneTitle.draw();
+			if (isChange) {
+				sceneTitle.end();
 
-		scene.draw();
+				sceneMain.init();
+				sceneNo = 1;
+			}
+			break;
+		case 1:
+			sceneMain.update();
+			sceneMain.draw();
+			break;
+		}
 
+		
 		//裏画面を表画面を入れ替える
 		ScreenFlip();
 
@@ -53,8 +85,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 	}
 
-	scene.end();
-
+	switch (sceneNo) {
+	case 0:
+		sceneTitle.end();
+		break;
+	case 1:
+		sceneMain.end();
+		break;
+	}
+	
 	DxLib_End();				// ＤＸライブラリ使用の終了処理
 
 	return 0;				// ソフトの終了 

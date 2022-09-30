@@ -36,7 +36,7 @@ void SceneMain::end() {
 
 }
 
-void SceneMain::update() {
+bool SceneMain::update() {
 
 	m_player.update();
 	m_car.update();
@@ -46,6 +46,7 @@ void SceneMain::update() {
 		m_player.setDead(true);
 	}
 
+	return false;
 }
 
 void SceneMain::draw() {

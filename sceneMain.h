@@ -12,7 +12,7 @@ public:
 	void end();
 
 	//ƒQ[ƒ€ˆ—
-	void update();
+	bool update();
 	//•`‰æ
 	void draw();
 
