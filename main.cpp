@@ -1,8 +1,6 @@
 #include "DxLib.h"
-
+#include "sceneMain.h"
 #include "game.h"
-#include "player.h"
-#include "car.h"
 
 namespace
 {
@@ -25,19 +23,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		return -1;			// エラーが起きたら直ちに終了
 	}
 
-	int hPlayer = LoadGraph("data/player.png");
-	int hCar = LoadGraph("data/car.png");
-
-	Player player;
-	player.setGraphic(hPlayer);
-	player.setup(kFieldY);
-
-	Car car;
-	car.setGraphic(hCar);
-	car.setup(kFieldY);
+	
 
 	// ダブルバッファモード
 	SetDrawScreen(DX_SCREEN_BACK);
+
+	SceneMain scene;
+	scene.init();
 
 	while (ProcessMessage() == 0)
 	{
@@ -45,18 +37,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		// 画面のクリア
 		ClearDrawScreen();
 
-		player.update();
-		car.update();
+		scene.update();
 
-		if (player.isCol(car))
-		{
-			player.setDead(true);
-		}
-
-		// 地面の描画
-		DrawLine(0, kFieldY, Game::kScreenWidth, kFieldY, GetColor(255, 255, 255));
-		player.draw();
-		car.draw();
+		scene.draw();
 
 		//裏画面を表画面を入れ替える
 		ScreenFlip();
@@ -70,8 +53,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 	}
 
-	DeleteGraph(hPlayer);
-	DeleteGraph(hCar);
+	scene.end();
 
 	DxLib_End();				// ＤＸライブラリ使用の終了処理
 

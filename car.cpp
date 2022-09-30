@@ -61,8 +61,6 @@ void Car::setup(float fieldY)
 		m_moveType = kMoveTypeReturn;
 	}
 
-	m_moveType = kMoveTypeReturn;
-
 	//“®‚«n‚ß‚é‚Ü‚Å‚ÌŠÔ‚ğİ’è
 	m_waitFrame = GetRand(kWaitFrameMax - kWaitFrameMin) + kWaitFrameMin;
 
